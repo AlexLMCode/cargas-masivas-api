@@ -8,6 +8,9 @@ abstract class Controller
     public const SUCCESS_MESSAGE = 'Request processed successfully!';
     public const FAILED_MESSAGE = 'Unable to process the request. Please try again!';
     public const EXCEPTION_MESSAGE = 'Exception occurred. Please try again!';
+    public const INVALID_CREDENTIALS = 'Unable to process the login request due to invalid credentials';
+    public const USER_NOT_FOUND = 'User request not found';
+    public const USER_LOGED_OUT = 'User loged out successfully';
 
     //status keyword
     public const SUCCESS_STATUS = 'success';

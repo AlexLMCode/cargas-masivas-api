@@ -10,6 +10,15 @@ Route::get('/user', function (Request $request) {
 
 Route::controller(AuthController::class)->group(function () {
     Route::prefix('auth')->name('auth.')->group(function () {
+
+        //Auth Routes
         Route::post('register', 'register')->name('register');
+        Route::post('login', 'login')->name('login');
+
+        # Auth Middleware Routes
+        Route::middleware(['auth:api'])->group(function () {
+            Route::get('profile', 'userProfile')->name('profile');
+            Route::get('logout', 'logout')->name('logout');
+        });
     });
 });

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repository\AuthRepository;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService
@@ -26,8 +27,53 @@ class AuthService
     {
         $request = $request->all();
         $request['password'] = Hash::make($request['password']);
-        
+
         //Return user
         return $this->authRepository->registerUser($request);
+    }
+
+    /**
+     * Function: userLogin
+     * @param Request $request
+     * @return User
+     */
+    public function userLogin($request)
+    {
+        if (!Auth::attempt(['email' => $request['email'], 'password' => $request['password']])) {
+            return false;
+        }
+
+        $authUser = Auth::user();
+        $token = $authUser->createToken('token')->accessToken;
+        return [
+            'email' => $authUser->email,
+            'token' => $token
+        ];
+    }
+
+
+    /**
+     * Function: userLogOut
+     * @param NA
+     * @return Boolean
+     */
+    public function userLogOut()
+    {
+        $user = Auth::user();
+
+        if ($user) {
+            $user->token()->revoke();
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Function userProfile
+     */
+    public function userProfile()
+    {
+        return Auth::user();
     }
 }
