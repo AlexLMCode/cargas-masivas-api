@@ -20,7 +20,7 @@ Route::controller(AuthController::class)->group(function () {
         Route::middleware(['auth:api'])->group(function () {
             Route::get('profile', 'userProfile')->name('profile');
             Route::get('logout', 'logout')->name('logout');
-            Route::post('/import', [PersonaController::class, 'import'])->name('import');
+            Route::post('load', [PersonaController::class, 'load'])->name('load');
         });
     });
 });
