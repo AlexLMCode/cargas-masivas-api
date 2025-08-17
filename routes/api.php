@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\PersonaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,7 @@ Route::controller(AuthController::class)->group(function () {
         Route::middleware(['auth:api'])->group(function () {
             Route::get('profile', 'userProfile')->name('profile');
             Route::get('logout', 'logout')->name('logout');
+            Route::post('/import', [PersonaController::class, 'import'])->name('import');
         });
     });
 });
