@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('telefono', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('telefono');
+            $table->string('telefono', length: 10);
             $table->unsignedBigInteger('persona_id');
             $table->foreign('persona_id')->references('id')->on('persona')->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 

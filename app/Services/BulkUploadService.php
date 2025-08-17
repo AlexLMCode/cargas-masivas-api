@@ -15,29 +15,30 @@ class BulkUploadService
 
     public function import($request)
     {
-            $path = $request->storeAs('mysql_uploads', 'personas.csv');
-            $fullPath = '/var/lib/mysql_uploads/personas.csv';
-            dd($path);
-        // try {
-        //     $path = $request->storeAs('public', 'personas.csv');
-        //     $fullPath = storage_path("app/" . $path);
-        //     DB::select("CALL sp_cargar_personas(" . $fullPath . ")");
-        //     return true;
-        // } catch (\Throwable $th) {
-        //     Log::error('Exception ocurred while creating the records' . $th);
-        //     return false;
-        // }
+        try {
+            $store = $request->storeAs('mysql_uploads', 'personas.csv');
+            $fullPath = '/var/www/html/storage/mysql_uploads/personas.csv';
 
-        DB::connection()->getPdo()->exec("
-    LOAD DATA LOCAL INFILE '" . addslashes($fullPath) . "'
-    INTO TABLE tmp_personas
-    FIELDS TERMINATED BY ',' 
-    ENCLOSED BY '\"'
-    LINES TERMINATED BY '\\n'
-    IGNORE 1 LINES
-    (nombre, paterno, materno, telefono, calle, numero_exterior, numero_interior, colonia, cp)
-");
+            $pdo = DB::connection()->getPdo();
 
-DB::statement("CALL sp_procesar_personas();");
+            $pdo->exec("TRUNCATE TABLE tmp_personas");
+
+            $pdo->exec("
+                LOAD DATA LOCAL INFILE '" . addslashes($fullPath) . "'
+                INTO TABLE tmp_personas
+                FIELDS TERMINATED BY ',' 
+                ENCLOSED BY '\"'
+                LINES TERMINATED BY '\\n'
+                IGNORE 1 LINES
+                (nombre, paterno, materno, telefono, calle, numero_exterior, numero_interior, colonia, cp)
+            ");
+
+            $pdo->exec("CALL sp_cargar_personas()");
+
+            return true;
+        } catch (\Throwable $th) {
+            Log::error('Exception ocurred while creating the records' . $th);
+            return false;
+        }
     }
 }

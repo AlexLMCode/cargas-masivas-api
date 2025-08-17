@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('nombre', length: 50);
             $table->string('paterno', length: 50);
             $table->string('materno', length: 50);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 

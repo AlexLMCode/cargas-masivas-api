@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
@@ -14,19 +12,8 @@ return new class extends Migration
     {
         DB::unprepared('DROP PROCEDURE IF EXISTS sp_cargar_personas');
         DB::unprepared('
-            CREATE PROCEDURE sp_cargar_personas(IN ruta_csv VARCHAR(500))
+            CREATE PROCEDURE sp_cargar_personas()
             BEGIN
-                TRUNCATE TABLE tmp_personas;
-
-                SET @sql = CONCAT(
-                    "LOAD DATA LOCAL INFILE \'",
-                    ruta_csv,
-                    "\' INTO TABLE tmp_personas FIELDS TERMINATED BY \',\' ENCLOSED BY \'\"\' LINES TERMINATED BY \'\\n\' IGNORE 1 LINES (nombre, paterno, materno, telefono, calle, numero_exterior, numero_interior, colonia, cp)"
-                );
-
-                PREPARE stmt FROM @sql;
-                EXECUTE stmt;
-                DEALLOCATE PREPARE stmt;
 
                 INSERT INTO persona (nombre, paterno, materno)
                 SELECT DISTINCT t.nombre, t.paterno, t.materno

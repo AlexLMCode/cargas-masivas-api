@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('direccion', function (Blueprint $table) {
             $table->id();
             $table->string('calle', length: 100);
-            $table->string('numero_exterior', length: 4);
-            $table->string('numero_interior', length: 4);
+            $table->string('numero_exterior', length: 10);
+            $table->string('numero_interior', length: 10);
             $table->string('colonia', length: 100);
             $table->string('cp', length: 5);
             $table->unsignedBigInteger('persona_id');
             $table->foreign('persona_id')->references('id')->on('persona')->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 
