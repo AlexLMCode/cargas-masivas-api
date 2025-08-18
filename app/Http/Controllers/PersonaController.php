@@ -6,6 +6,7 @@ use App\Helper\ApiResponse;
 use App\Services\BulkUploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class PersonaController extends Controller
 {
@@ -19,12 +20,29 @@ class PersonaController extends Controller
     public function load(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:csv,txt'
+            'file' => 'required|file|mimes:csv,txt,xls,xlsx'
         ]);
 
-        $res = $this->bulkUploadService->import($request->file('file'));
+        $file = $request->file('file');
+        $extension = $file->getClientOriginalExtension();
 
+        if (in_array($extension, ['xls', 'xlsx'])) {
+            $spreadsheet = IOFactory::load($file->getRealPath());
+            $writer = IOFactory::createWriter($spreadsheet, 'Csv');
 
+            $tempPath = storage_path('app/temp_' . uniqid() . '.csv');
+            $writer->save($tempPath);
+
+            $file = new \Illuminate\Http\UploadedFile(
+                $tempPath,
+                basename($tempPath),
+                'text/csv',
+                null,
+                true
+            );
+        }
+
+        $res = $this->bulkUploadService->import($file);
         if (!$res) {
             return ApiResponse::error(status: self::ERROR_STATUS, message: self::ERROR_IMPORTING, statusCode: self::ERROR);
         }
