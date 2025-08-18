@@ -7,6 +7,68 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+# 🚀 Cómo correr el proyecto con Laravel Sail
+
+Este proyecto está construido con **Laravel** y **Sail (Docker)**.  
+Sigue estos pasos para levantarlo en tu máquina local:
+
+---
+
+## 📋 Requisitos previos
+- [Docker](https://docs.docker.com/get-docker/) instalado y corriendo
+- [Composer](https://getcomposer.org/) instalado
+
+---
+
+## ⚡ Pasos de instalación
+
+1. Clona el repositorio:
+   ```bash
+   git clone <url-del-repo>
+   cd <nombre-del-proyecto>
+    ```
+
+2.- Instala las dependencias de PHP
+    ```bash
+        composer install
+     ```
+
+3.- Copia el archivo de entorno
+    ```bash
+        cp .env.example .env
+     ```
+
+4.- Levanta los contenedores con sail
+    ```bash
+        ./vendor/bin/sail up -d
+     ```
+
+5.- Corre las migraciones y seeds
+    ```bash
+        ./vendor/bin/sail artisan migrate
+        ./vendor/bin/sail artisan db:seed
+     ```
+
+6.- Crea un cliente para passport (para poder crear tokens)
+    ```bash
+        ./vendor/bin/sail artisan passport:client --personal
+     ```
+
+7.- Levanta los contenedores
+    ```bash
+        ./vendor/bin/sail up -d
+     ```
+
+8.- Para detener los contenedores:
+    ```bash
+        ./vendor/bin/sail down
+     ```
+
+9.- Para ejecutar comandos de artisan
+    ```bash
+        ./vendor/bin/sail artisan <comando>
+     ```
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
