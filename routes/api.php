@@ -20,9 +20,10 @@ Route::controller(AuthController::class)->group(function () {
         Route::middleware(['auth:api'])->group(function () {
             Route::get('profile', 'userProfile')->name('profile');
             Route::get('logout', 'logout')->name('logout');
-            Route::post('load', [PersonaController::class, 'load'])->name('load');
             Route::get('/personas', [PersonaController::class, 'personas'])->name('personas');
-            Route::get('/personas/{id}', [PersonaController::class, 'persona'])->name('persona');
+
+            Route::post('load', [PersonaController::class, 'load'])->name('load')->middleware('permission:upload personas');
+            Route::get('/personas/{id}', [PersonaController::class, 'persona'])->name('persona')->middleware('show detalle persona');
         });
     });
 });

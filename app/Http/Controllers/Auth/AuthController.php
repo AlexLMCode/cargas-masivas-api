@@ -9,6 +9,7 @@ use App\Http\Requests\AuthRegister;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 
 class AuthController extends Controller
 {
@@ -103,5 +104,18 @@ class AuthController extends Controller
             Log::error('Exception ocurred while retreiving user' . $th->getMessage());
             return ApiResponse::error(self::ERROR_STATUS, self::EXCEPTION_MESSAGE, self::ERROR);
         }
+    }
+
+    public function user(Request $request)
+    {
+        $user = $request->user();
+        // Load roles and permissions
+        $user->load('roles', 'permissions');
+
+        return response()->json([
+            'user' => $user,
+            'permissions' => $user->getAllPermissions()->pluck('name'),
+            'roles' => $user->getRoleNames()
+        ]);
     }
 }

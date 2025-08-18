@@ -16,11 +16,16 @@ class AuthRepository
 
     /**
      * Function: registeruser
-     * @param array $userRequest
+     * @param Request $userRequest
      * @return User
      */
     public function registerUser($userRequest)
     {
-        return User::create($userRequest);
+        $user = User::create($userRequest);
+
+        $user->assignRole($userRequest['role']);
+        $token = $user->createToken('authToken')->plainTextToken;
+
+        return $user;
     }
 }

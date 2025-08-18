@@ -26,7 +26,8 @@ class AuthRegister extends FormRequest
         return [
             'name' => 'required|min:5',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|alpha_num|min:5|max:20'
+            'password' => 'required|alpha_num|min:5|max:20',
+            'role' => 'required|in:admin,viewer'
         ];
     }
 
