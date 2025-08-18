@@ -28,43 +28,43 @@ Sigue estos pasos para levantarlo en tu máquina local:
    cd <nombre-del-proyecto>
     ```
 
-2.- Instala las dependencias de PHP
+2. Instala las dependencias de PHP
     ```bash
-        composer install
+    composer install
      ```
 
-3.- Copia el archivo de entorno
+3. Copia el archivo de entorno
     ```bash
         cp .env.example .env
      ```
 
-4.- Levanta los contenedores con sail
+4. Levanta los contenedores con sail
     ```bash
         ./vendor/bin/sail up -d
      ```
 
-5.- Corre las migraciones y seeds
+5. Corre las migraciones y seeds
     ```bash
         ./vendor/bin/sail artisan migrate
         ./vendor/bin/sail artisan db:seed
      ```
 
-6.- Crea un cliente para passport (para poder crear tokens)
+6. Crea un cliente para passport (para poder crear tokens)
     ```bash
         ./vendor/bin/sail artisan passport:client --personal
      ```
 
-7.- Levanta los contenedores
+7. Levanta los contenedores
     ```bash
         ./vendor/bin/sail up -d
      ```
 
-8.- Para detener los contenedores:
+8. Para detener los contenedores:
     ```bash
         ./vendor/bin/sail down
      ```
 
-9.- Para ejecutar comandos de artisan
+9. Para ejecutar comandos de artisan
     ```bash
         ./vendor/bin/sail artisan <comando>
      ```
