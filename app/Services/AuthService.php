@@ -27,9 +27,17 @@ class AuthService
     {
         $request = $request->all();
         $request['password'] = Hash::make($request['password']);
+        $registeredUser = $this->authRepository->registerUser($request);
 
-        //Return user
-        return $this->authRepository->registerUser($request);
+        $token = $registeredUser->createToken('token')->accessToken;
+        return [
+            'user' => [
+                'email' => $registeredUser->email,
+                'name' => $registeredUser->name,
+            ],
+            'token' => $token,
+            'permissions' => $registeredUser->getAllPermissions()
+        ];
     }
 
     /**
@@ -47,7 +55,10 @@ class AuthService
         $token = $authUser->createToken('token')->accessToken;
         return [
             'email' => $authUser->email,
-            'token' => $token
+            'name' => $authUser->name,
+            'token' => $token,
+            'role' => $authUser->getRoleNames(),
+            'permissions' => $authUser->getAllPermissions()
         ];
     }
 
@@ -74,6 +85,12 @@ class AuthService
      */
     public function userProfile()
     {
-        return Auth::user();
+        $authUser = Auth::user();
+        return [
+            'email' => $authUser->email,
+            'name' => $authUser->name,
+            'role' => $authUser->getRoleNames(),
+            'permissions' => $authUser->getAllPermissions()
+        ];
     }
 }

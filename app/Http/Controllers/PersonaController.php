@@ -39,11 +39,13 @@ class PersonaController extends Controller
         $offset = ($page - 1) * $limit;
 
         $personas = DB::select('CALL sp_get_personas(?, ?)', [$offset, $limit]);
+        $total = DB::table('persona')->count();
 
         return response()->json([
             'data' => $personas,
             'page' => $page,
-            'per_page' => $limit
+            'per_page' => $limit,
+            'total' => $total
         ]);
     }
 
